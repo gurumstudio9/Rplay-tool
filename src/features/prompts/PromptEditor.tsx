@@ -1,5 +1,6 @@
 import { ToolbarSlot } from "../workspace/WorkspaceSidebar";
 import { AutoTextarea } from "../workspace/AutoTextarea";
+import { TokenCount } from "../workspace/TokenCount";
 import {
   useEffect,
   useMemo,
@@ -182,7 +183,7 @@ export function PromptEditor({
           >
             집중
           </button>
-          <strong>{activeText.length.toLocaleString()}자</strong>
+          <strong>{activeText.length.toLocaleString()}자<TokenCount text={activeText} /></strong>
         </div>
       </header>
 

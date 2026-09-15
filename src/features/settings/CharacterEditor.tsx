@@ -1,5 +1,6 @@
 import { ToolbarSlot } from "../workspace/WorkspaceSidebar";
 import { AutoTextarea } from "../workspace/AutoTextarea";
+import { TokenCount } from "../workspace/TokenCount";
 import {
   genderLabels,
   groupLabels,
@@ -233,7 +234,7 @@ export function CharacterEditor({
             <label className="settings-span-2" key={field}>
               <span className="settings-label-row">
                 <span>{label}{field === "introduction" ? " (최대 300자)" : ""}</span>
-                {field === "prompt" ? <small>{form.prompt.length}자</small> : null}
+                {field === "prompt" ? <small>{form.prompt.length}자<TokenCount text={form.prompt} /></small> : null}
               </span>
               <AutoTextarea
                 rows={rows}

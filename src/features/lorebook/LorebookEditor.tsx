@@ -1,4 +1,5 @@
 import { AutoTextarea } from "../workspace/AutoTextarea";
+import { TokenCount } from "../workspace/TokenCount";
 import {
   lorebookBodyLimitLabel,
   lorebookBodyState,
@@ -156,6 +157,7 @@ export function LorebookEditor({
               <small className={entry.body.length > bodyLimit ? "is-warning" : ""}>
                 {entry.body.length} / {lorebookBodyLimitLabel(bodyLimit)}
               </small>
+              {!bodyUnavailable ? <TokenCount text={entry.body} /> : null}
               </span>
           </span>
           <AutoTextarea

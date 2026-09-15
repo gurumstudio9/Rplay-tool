@@ -208,6 +208,7 @@
 }
 
 .lore-field-tools small,
+.lore-field-tools .inline-token-count,
 .lore-title-input small {
   color: var(--muted);
   font-size: 9px;

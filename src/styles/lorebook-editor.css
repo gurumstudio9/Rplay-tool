@@ -1,0 +1,253 @@
+.lore-editor {
+  display: grid;
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  background: var(--surface);
+  box-shadow: 0 8px 26px rgb(53 55 49 / 5%);
+  padding: 20px;
+  gap: 15px;
+}
+.lore-editor--empty {
+  min-height: 142px;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.lore-editor--empty > span {
+  color: #9aa39d;
+  font-size: 22px;
+}
+
+.lore-editor--empty strong {
+  font-size: 13px;
+}
+
+.lore-editor--empty p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.lore-editor-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.lore-editor-heading > div {
+  min-width: 0;
+}
+
+.lore-editor-heading h2 {
+  margin: 7px 0 0;
+  font-size: 18px;
+  letter-spacing: -0.035em;
+}
+
+.lore-editor-heading p {
+  margin: 4px 0 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lore-storage-badge,
+.lore-storage-inline {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 850;
+}
+
+.lore-storage-badge {
+  padding: 4px 7px;
+}
+
+.lore-storage-badge--ready,
+.lore-storage-inline--ready {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.lore-storage-badge--pending,
+.lore-storage-inline--pending {
+  color: #8a582b;
+  background: var(--warm-soft);
+}
+
+.lore-storage-badge--error,
+.lore-storage-inline--error {
+  color: #a23830;
+  background: #f9dedb;
+}
+
+.lore-storage-badge--legacy,
+.lore-storage-inline--legacy {
+  color: #5d625d;
+  background: #e9e8e2;
+}
+
+.lore-delete-button {
+  min-height: 35px;
+  border: 1px solid #e0aaa4;
+  border-radius: 9px;
+  color: #9c3d34;
+  background: #fff7f5;
+  padding: 0 11px;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.lore-delete-button:disabled {
+  opacity: 0.45;
+}
+
+.lore-identity-fields {
+  display: grid;
+  grid-template-columns: 150px 120px minmax(190px, 1fr) 130px;
+  border: 1px solid var(--line-soft);
+  border-radius: 13px;
+  background: #f8f6f0;
+  padding: 11px;
+  gap: 9px;
+}
+
+.lore-identity-fields label,
+.lore-editor-grid label {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+
+.lore-identity-fields label > span,
+.lore-editor-grid label > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #565c54;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.lore-identity-fields input,
+.lore-identity-fields select,
+.lore-editor-grid input,
+.lore-editor-grid textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  outline: none;
+  color: var(--ink);
+  background: white;
+  font-size: 12px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.lore-identity-fields input,
+.lore-identity-fields select,
+.lore-editor-grid input {
+  height: 38px;
+  padding: 0 10px;
+}
+
+.lore-identity-fields input[readonly] {
+  color: var(--muted);
+  background: #efede7;
+}
+
+.lore-identity-fields input:focus,
+.lore-identity-fields select:focus,
+.lore-editor-grid input:focus,
+.lore-editor-grid textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgb(25 89 76 / 10%);
+}
+
+.lore-identity-fields label.has-error input {
+  border-color: #cc5c52;
+}
+
+.lore-editor-error {
+  border: 1px solid #e6b2ac;
+  border-radius: 9px;
+  color: #98382f;
+  background: #fff1ef;
+  padding: 9px 11px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.lore-editor-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(320px, 1.2fr);
+  gap: 13px;
+}
+
+.lore-body-input {
+  grid-column: 1 / -1;
+}
+
+.lore-editor-grid textarea {
+  min-height: 250px;
+  resize: vertical;
+  padding: 12px;
+  line-height: 1.7;
+}
+
+.lore-field-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lore-field-tools small,
+.lore-title-input small {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.lore-field-tools small.is-warning,
+.lore-title-input small.is-warning {
+  color: #b1493e;
+}
+
+.lore-field-tools button {
+  min-height: 25px;
+  border: 1px solid #b7cfc5;
+  border-radius: 7px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0 8px;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lore-field-tools button:disabled {
+  opacity: 0.45;
+}
+
+@media (max-width: 900px) {
+  .lore-identity-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .lore-editor-grid,
+  .lore-identity-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .lore-body-input {
+    grid-column: auto;
+  }
+}

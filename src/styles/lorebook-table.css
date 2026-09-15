@@ -1,0 +1,246 @@
+.lore-table-shell {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  background: var(--surface);
+  box-shadow: 0 8px 26px rgb(53 55 49 / 5%);
+}
+
+.lore-table-scroll {
+  overflow: auto;
+  max-height: min(68vh, 760px);
+}
+
+.lore-table-shell table {
+  width: 100%;
+  min-width: 850px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.lore-table-shell thead {
+  position: sticky;
+  z-index: 3;
+  top: 0;
+}
+
+.lore-table-shell th {
+  height: 42px;
+  border-bottom: 1px solid var(--line);
+  color: #6a7068;
+  background: #f5f3ed;
+  padding: 0 9px;
+  font-size: 10px;
+  font-weight: 850;
+  text-align: left;
+}
+
+.lore-table-shell th button {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  padding: 0;
+  gap: 5px;
+  font-size: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+}
+
+.lore-table-shell th button span {
+  color: #a7aaa4;
+  font-size: 9px;
+}
+
+.lore-table-shell th button.is-active {
+  color: var(--accent);
+}
+
+.lore-table-shell td {
+  border-bottom: 1px solid var(--line-soft);
+  color: #444941;
+  background: var(--surface);
+  padding: 9px;
+  font-size: 10px;
+  vertical-align: middle;
+  transition: background 130ms ease;
+}
+
+.lore-table-shell tbody tr {
+  cursor: pointer;
+}
+
+.lore-table-shell tbody tr:hover td {
+  background: #f7faf8;
+}
+
+.lore-table-shell tbody tr.is-selected td {
+  background: #edf6f2;
+}
+
+.lore-table-shell tbody tr.is-selected td:first-child {
+  box-shadow: inset 3px 0 var(--accent);
+}
+
+.lore-table-shell tbody tr.is-bulk-selected td {
+  background: #f1f7f4;
+}
+
+.lore-col-check {
+  width: 52px;
+  text-align: center;
+}
+
+.lore-col-no {
+  width: 76px;
+}
+
+.lore-col-no code {
+  color: #687069;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 9px;
+}
+
+.lore-col-date {
+  width: 120px;
+  color: var(--muted) !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.lore-col-type {
+  width: 92px;
+}
+
+.lore-type-badge {
+  display: inline-flex;
+  border-radius: 7px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 5px 7px;
+  font-size: 9px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.lore-col-title {
+  width: 190px;
+}
+
+.lore-col-title strong {
+  display: block;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lore-storage-inline {
+  margin-top: 5px;
+  padding: 3px 5px;
+}
+
+.lore-col-trigger {
+  width: 230px;
+}
+
+.lore-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 50px;
+  overflow: hidden;
+  gap: 4px;
+}
+
+.lore-tag-list span {
+  display: inline-flex;
+  max-width: 110px;
+  overflow: hidden;
+  border: 1px solid #dde2dd;
+  border-radius: 999px;
+  color: #60665f;
+  background: #f4f5f2;
+  padding: 3px 6px;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lore-tag-list small {
+  color: #9b9f98;
+  font-size: 9px;
+}
+
+.lore-col-count {
+  width: 92px;
+  color: var(--muted) !important;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.lore-col-count.is-warning {
+  color: #ad473d !important;
+  font-weight: 800;
+}
+
+.lore-col-actions {
+  width: 125px;
+}
+
+.lore-col-actions > div {
+  display: flex;
+  gap: 4px;
+}
+
+.lore-col-actions button {
+  min-width: 29px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: #5e645d;
+  background: white;
+  padding: 0 7px;
+  font-size: 9px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.lore-col-actions button:hover:not(:disabled) {
+  border-color: #a8bdb4;
+  color: var(--accent);
+}
+
+.lore-col-actions button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.lore-table-empty {
+  display: grid;
+  min-height: 180px;
+  place-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.lore-table-empty strong {
+  font-size: 13px;
+}
+
+.lore-table-empty p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+@media (max-width: 720px) {
+  .lore-table-scroll {
+    max-height: none;
+  }
+}

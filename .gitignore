@@ -1,0 +1,55 @@
+node_modules/
+/.task-output/
+/.agents/
+/AGENTS.md
+/GEMINI.md
+/walkthrough.md
+/docs/
+/data/
+/rplay-canvas-settings.json
+/.rplay-canvas-runtime.json
+*.log
+/.local-tests/
+!tests/
+tests/*
+!tests/comfy-output.test.cjs
+!tests/work-markdown-export.test.cjs
+!tests/image-review.test.cjs
+!tests/image-generation-settings.test.cjs
+!tests/image-number-cleanup.test.cjs
+!tests/image-file-organizer-local.test.cjs
+!tests/image-generation-background.test.cjs
+graphify-out/
+.env
+*.env
+.gemini/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+
+# Temporary and local config files
+scratch/
+config/*.json
+
+# Image and media assets
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.bmp
+*.ico
+*.mp4
+*.webm
+*.zip
+*.tar.gz
+
+# User generated image tags
+# data/works/*/이미지태그/*.json
+
+# Portable runtimes supplied with distribution builds
+/runtime/

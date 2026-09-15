@@ -3,6 +3,37 @@
 .prompt-page-header .prompt-tabs button { flex: 1 1 110px; padding: 8px; gap: 5px; }
 .prompt-page.is-focused .prompt-page-header { display: none; }
 
+.prompt-token-usage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  font-size: 12px;
+}
+
+.prompt-token-summary { display: grid; flex: 1 1 240px; gap: 4px; }
+.prompt-token-summary strong { color: var(--accent); font-size: 14px; }
+.prompt-token-summary span, .prompt-token-summary small { color: var(--muted); }
+.prompt-token-limit { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+.prompt-token-limit input {
+  width: 92px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: inherit;
+}
+.prompt-token-budget { display: flex; flex: 1 1 100%; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.prompt-token-budget progress { flex: 1 1 100px; height: 8px; accent-color: var(--accent); }
+.prompt-token-budget span { color: var(--muted); font-variant-numeric: tabular-nums; }
+.prompt-token-usage.is-over-limit { border-color: #b54034; }
+.prompt-token-usage.is-over-limit .prompt-token-budget span { color: #b54034; font-weight: 700; }
+.prompt-token-usage.is-over-limit progress { accent-color: #b54034; }
+
 .prompt-editor {
   display: grid;
   min-width: 0;

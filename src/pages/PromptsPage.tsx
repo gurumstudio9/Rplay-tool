@@ -4,6 +4,7 @@ import { PromptDiffPanel } from "../features/prompts/PromptDiffPanel";
 import { PromptEditor } from "../features/prompts/PromptEditor";
 import { PromptLorebookSidebar } from "../features/prompts/PromptLorebookSidebar";
 import { PromptTabs } from "../features/prompts/PromptTabs";
+import { PromptTokenUsage } from "../features/prompts/PromptTokenUsage";
 import { PromptVersionDialog } from "../features/prompts/PromptVersionDialog";
 import { PromptVersionList } from "../features/prompts/PromptVersionList";
 import { RplayVariableEditor } from "../features/prompts/RplayVariableEditor";
@@ -13,6 +14,7 @@ import { copyText } from "../features/prompts/platform";
 import { usePromptLorebook } from "../features/prompts/usePromptLorebook";
 import { usePromptManager } from "../features/prompts/usePromptManager";
 import { useWorks } from "../features/works/WorkContext";
+import { storyPromptText } from "../features/rplay/canvasContent";
 import "../styles/prompts.css";
 import "../styles/prompts-editor.css";
 import "../styles/prompts-lorebook.css";
@@ -115,6 +117,17 @@ export function PromptsPage() {
           ) : null}
 
           <div className="prompt-center-column">
+            {manager.activeTab !== "suggestedReplies" ? (
+              <PromptTokenUsage
+                key={`${workKey}:${manager.activeTab}`}
+                storageKey={`prompt-token-limit:${workKey}:${manager.activeTab}`}
+                text={manager.activeText}
+                combinedText={manager.activeTab === "mainPrompt"
+                  ? storyPromptText(manager.state.mainPrompt, manager.activeVersion?.additionalPrompt)
+                  : undefined}
+                defaultLimit={manager.activeTab === "mainPrompt" ? 7500 : undefined}
+              />
+            ) : null}
             <PromptEditor
               versions={manager.state.versions}
               activeVersion={manager.activeVersion}

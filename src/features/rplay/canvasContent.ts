@@ -1223,7 +1223,7 @@ function compactForInclusion(value: unknown) {
   return normalizedText(value).replace(/\s+/g, " ");
 }
 
-function storyPromptText(mainPrompt: unknown, additionalPrompt: unknown) {
+export function storyPromptText(mainPrompt: unknown, additionalPrompt: unknown) {
   return [normalizedText(mainPrompt), normalizedText(additionalPrompt)]
     .filter(Boolean)
     .join("\n\n");

@@ -1,6 +1,7 @@
 import { ToolbarSlot, SidebarSection } from "../workspace/WorkspaceSidebar";
 import type { AuditReport, RplayFeedback } from "./model";
 import { RplayFeedbackPanel } from "./RplayFeedbackPanel";
+import { HelpButton } from "../help/HelpButton";
 
 type RplayRoundtripAuditProps = {
   busy: boolean;
@@ -60,7 +61,7 @@ export function RplayRoundtripAudit({
       <SidebarSection order={18}><header className="rplay-panel-heading">
         <span>02</span>
         <div>
-          <strong>알플레이 왕복 잘림 검증기</strong>
+          <strong>알플레이 왕복 잘림 검증기</strong> <HelpButton topic="roundtrip" />
           <p>
             업로드 직전 생성본과 알플레이 재내보내기본을 비교하여
             로어북·캐릭터·스타터 본문의 잘림과 누락을 찾습니다.

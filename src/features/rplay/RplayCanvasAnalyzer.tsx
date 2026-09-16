@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { CanvasAuditReport, RplayFeedback } from "./model";
 import { analyzeCanvasJson } from "./analyzer";
 import { RplayFeedbackPanel } from "./RplayFeedbackPanel";
+import { HelpButton } from "../help/HelpButton";
 
 interface RplayCanvasAnalyzerProps {
   workId: string;
@@ -49,7 +50,7 @@ export function RplayCanvasAnalyzer({ workId }: RplayCanvasAnalyzerProps) {
       <SidebarSection order={18}><header className="rplay-panel-heading">
         <span>03</span>
         <div>
-          <strong>알플레이 캔버스 노드 분석기</strong>
+          <strong>알플레이 캔버스 노드 분석기</strong> <HelpButton topic="analyzer" />
           <p>
             캔버스 내보내기 JSON을 분석하여 스토리 노드 전이 흐름,
             변수 바인딩, 허브 결선, 고립 노드를 전수 진단합니다.

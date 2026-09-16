@@ -1,0 +1,36 @@
+.feature-help-pair { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+.feature-help-button.feature-help-button {
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+  width: 26px; min-width: 26px; height: 26px; min-height: 26px; padding: 0;
+  border: 1px solid var(--line); border-radius: 50%; color: var(--accent-strong);
+  background: var(--surface); font-size: 13px; font-weight: 800; line-height: 1; cursor: pointer;
+}
+.feature-help-button.feature-help-button--label { width: auto; height: 34px; border-radius: 9px; padding: 0 10px; gap: 7px; font-size: 12px; }
+.feature-help-button:hover { border-color: var(--accent); background: var(--accent-soft); }
+.feature-help-button:focus-visible, .feature-help-dialog button:focus-visible, .feature-help-dialog a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.feature-help-dialog {
+  width: min(620px, calc(100vw - 28px)); max-height: calc(100dvh - 36px); margin: auto;
+  padding: 0; overflow: auto; border: 1px solid var(--line); border-radius: 18px;
+  color: var(--ink); background: var(--surface); box-shadow: 0 24px 80px rgb(0 0 0 / 24%);
+}
+.feature-help-dialog::backdrop { background: rgb(24 34 29 / 45%); }
+.feature-help-content { padding: 26px; }
+.feature-help-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.feature-help-header small { color: var(--muted); font-size: 11px; }
+.feature-help-header h2 { margin: 8px 0 0; font-size: 23px; line-height: 1.35; }
+.feature-help-close { flex: 0 0 auto; width: 34px; height: 34px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: var(--surface-strong); color: var(--ink); font-size: 24px; cursor: pointer; }
+.feature-help-summary { margin: 20px 0; font-size: 15px; line-height: 1.75; word-break: keep-all; overflow-wrap: anywhere; }
+.feature-help-steps { margin: 0; padding-left: 26px; display: grid; gap: 14px; font-size: 14px; line-height: 1.75; word-break: keep-all; overflow-wrap: anywhere; }
+.feature-help-steps li { padding-left: 5px; }
+.feature-help-steps li::marker { color: var(--accent); font-weight: 800; }
+.feature-help-note { margin: 22px 0 0; padding: 14px 16px; border-radius: 10px; background: var(--accent-soft); color: var(--accent-strong); font-size: 13px; line-height: 1.75; }
+.feature-help-footer { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 22px; border-top: 1px solid var(--line-soft); padding-top: 16px; }
+.feature-help-footer button, .feature-help-footer a { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-strong); color: var(--accent-strong); font-size: 12px; font-weight: 700; cursor: pointer; }
+.feature-help-footer a { text-decoration: underline; text-underline-offset: 3px; }
+.feature-help-context { display: flex; align-items: center; justify-content: flex-end; gap: 7px; margin: 10px 0; color: var(--muted); font-size: 12px; }
+@media (max-width: 600px) {
+  .feature-help-content { padding: 20px; }
+  .feature-help-header h2 { font-size: 20px; }
+  .feature-help-button.feature-help-button { width: 30px; min-width: 30px; height: 30px; }
+  .feature-help-button.feature-help-button--label { width: auto; }
+}

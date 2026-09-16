@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { toolGroups, tools } from "../features/tools/tools";
 import { useWorks } from "../features/works/WorkContext";
+import { HelpButton } from "../features/help/HelpButton";
 
 export function DashboardPage() {
   const { activeWork, activeWorkId, activePlatformId, status } = useWorks();
@@ -51,9 +52,9 @@ export function DashboardPage() {
         </div>
         <ManagementMenu>
           <div className="dashboard-export">
-            <ToolbarSlot slot="actions"><button type="button" disabled={exporting || status !== "ready"} onClick={() => void exportMarkdown()}>
+            <ToolbarSlot slot="actions"><span className="feature-help-pair"><button type="button" disabled={exporting || status !== "ready"} onClick={() => void exportMarkdown()}>
               {exporting ? "MD 조립 중…" : "작품 전체 MD 저장"}
-            </button></ToolbarSlot>
+            </button><HelpButton topic="markdown" /></span></ToolbarSlot>
             <small>{activePlatformId} · 저장된 모든 시작상황, 공통 로어북, 캐릭터 MD</small>
           </div>
         </ManagementMenu>

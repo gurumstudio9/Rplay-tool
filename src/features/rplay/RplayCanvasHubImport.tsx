@@ -5,6 +5,7 @@ import { addRegisteredHub, connectRegisteredHub, planHubImport } from "./canvasH
 import type { JsonObject } from "./model";
 import { hubBatchItems } from "./canvasBatch";
 import { RplayCanvasBatchPanel } from "./RplayCanvasBatchPanel";
+import { HelpButton } from "../help/HelpButton";
 
 type Props = {
   workId: string;
@@ -62,6 +63,7 @@ export function RplayCanvasHubImport({ workId, canvas, onApply }: Props) {
     <div className="rplay-content-workspace rplay-hub-import">
       {!loading && catalog ? <RplayCanvasBatchPanel canvas={canvas} items={hubBatchItems(canvas, hubs)} onApply={onApply} /> : null}
       <div className="rplay-content-toolbar">
+        <HelpButton topic="canvasHub" label="허브 적용 도움말" />
         <label>
           저장된 허브
           <select aria-label="캔버스에 적용할 허브" value={selectedId} disabled={loading || !catalog || !hubs.length}

@@ -43,8 +43,15 @@ import { RplayFeedbackPanel } from "./RplayFeedbackPanel";
 import { RplayCanvasHubImport } from "./RplayCanvasHubImport";
 import { canvasBatchItems } from "./canvasBatch";
 import { RplayCanvasBatchPanel } from "./RplayCanvasBatchPanel";
+import { HelpButton } from "../help/HelpButton";
+import type { HelpTopicId } from "../help/topics";
 
 type EditorTab = "lorebook" | "character" | "variable" | "updateRule" | "statusView" | "story" | "achievement" | "hub";
+
+const tabHelp: Record<EditorTab, HelpTopicId> = {
+  lorebook: "lorebook", character: "canvasCharacter", variable: "variables", updateRule: "variables",
+  statusView: "assets", story: "prompts", achievement: "achievements", hub: "canvasHub"
+};
 
 type RplayCanvasContentEditorProps = {
   workId: string;
@@ -674,7 +681,7 @@ export function RplayCanvasContentEditor({
       <SidebarSection order={18}><header className="rplay-panel-heading">
         <span>04</span>
         <div>
-          <strong>캔버스 콘텐츠 편집기</strong>
+          <strong>캔버스 콘텐츠 편집기</strong> <HelpButton topic="canvasEdit" />
           <p>
             현재 캔버스를 원본 자료와 비교하고 로어북·인물·변수·업데이트 규칙·상태창 노드를 안전하게 갱신합니다.
             스토리 노드는 프롬프트·배경과 시작 노드의 메시지·가이드를 각각 알맞은 필드로 갱신합니다.
@@ -709,6 +716,7 @@ export function RplayCanvasContentEditor({
 
         {draftCanvas ? (
           <>
+            <div className="feature-help-context">현재 탭 사용법 <HelpButton topic={tabHelp[activeTab]} /></div>
             <SidebarSection order={22}><div className="rplay-content-toolbar">
               <button
                 className="rplay-secondary-button"

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { HelpButton } from "../help/HelpButton";
 
 type DirectoryState = { currentPath: string; savedPath: string; defaultPath: string; source: string; canChange: boolean; cancelled?: boolean };
 
@@ -31,6 +32,7 @@ export function DataDirectorySettings() {
   }
   return <details>
     <summary>데이터 폴더</summary>
+    <div className="feature-help-context">저장 위치 변경 <HelpButton topic="directory" /></div>
     {data ? <>
       <p style={{ overflowWrap: "anywhere" }}>현재 위치: {data.currentPath}</p>
       {data.canChange && data.savedPath !== data.currentPath && <p style={{ overflowWrap: "anywhere" }}>다음 실행 위치: {data.savedPath}</p>}

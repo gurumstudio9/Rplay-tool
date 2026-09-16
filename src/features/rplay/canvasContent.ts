@@ -750,7 +750,11 @@ export function addCanvasCharacter(
     updatedAt: createdAt
   };
   next.metadataSet = metadata;
-  return next;
+  return addCanvasCharacterImages(next, nodeUid, source.name, {
+    nodeUids: options.imageNodeUids,
+    connectionUids: options.imageConnectionUids,
+    createdAt
+  });
 }
 
 export function addCanvasCharacterImages(

@@ -6,6 +6,8 @@ import { ToolIcon } from "../features/tools/ToolIcon";
 import { toolNavigationRows, tools } from "../features/tools/tools";
 import { useWorks, type Work } from "../features/works/WorkContext";
 import { DataDirectorySettings } from "../features/workspace/DataDirectorySettings";
+import { HelpButton } from "../features/help/HelpButton";
+import { toolHelpTopics } from "../features/help/topics";
 
 function connectionLabel(status: "loading" | "ready" | "offline") {
   if (status === "ready") return "기존 데이터 연결됨";
@@ -188,14 +190,16 @@ export function AppShell() {
                   {tools
                     .filter((tool) => tool.group === group)
                     .map((tool) => (
+                      <span className="feature-help-pair" key={tool.id}>
                       <NavLink
-                        key={tool.id}
                         to={`/${tool.path}`}
                         className={({ isActive }) => isActive ? "tool-nav-link is-active" : "tool-nav-link"}
                       >
                         <span aria-hidden="true"><ToolIcon id={tool.id} /></span>
                         {tool.label}
                       </NavLink>
+                      <HelpButton topic={toolHelpTopics[tool.id]} />
+                      </span>
                     ))}
                 </div>
               ))}
@@ -203,7 +207,7 @@ export function AppShell() {
           ))}
         </div>
         <div className="work-control">
-          <span className="work-label">작품</span>
+          <span className="feature-help-pair"><span className="work-label">작품</span><HelpButton topic="works" /></span>
           <button
             className="work-picker-trigger"
             aria-haspopup="dialog"
@@ -238,6 +242,7 @@ export function AppShell() {
         </div>
         <section className="workspace-management" aria-label="관리">
           <h2>관리</h2>
+          <HelpButton topic="guide" label="처음 사용 가이드" />
           <DataDirectorySettings />
           <div className="workspace-sidebar-slot" ref={sidebarRefs[30]} />
         </section>

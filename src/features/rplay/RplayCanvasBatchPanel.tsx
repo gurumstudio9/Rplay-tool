@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { applyCanvasBatch, type CanvasBatchItem } from "./canvasBatch";
 import type { JsonObject } from "./model";
+import { HelpButton } from "../help/HelpButton";
 
 type Props = {
   canvas: JsonObject;
@@ -42,7 +43,7 @@ export function RplayCanvasBatchPanel({ canvas, items, onApply }: Props) {
   }
 
   return <section className="rplay-batch-panel" aria-label="노드 추가·삭제 체크리스트">
-    <header><strong>추가·삭제 대상</strong><label>타입
+    <header><span className="feature-help-pair"><strong>추가·삭제 대상</strong><HelpButton topic="canvasBatch" /></span><label>타입
       <select aria-label="추가·삭제 대상 타입" value={type} onChange={(event) => setType(event.target.value)}>
         <option value="">전체 타입</option>
         {types.map((kind) => <option key={kind} value={kind}>{kind}</option>)}

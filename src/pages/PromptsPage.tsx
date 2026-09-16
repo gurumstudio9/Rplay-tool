@@ -15,6 +15,8 @@ import { usePromptLorebook } from "../features/prompts/usePromptLorebook";
 import { usePromptManager } from "../features/prompts/usePromptManager";
 import { useWorks } from "../features/works/WorkContext";
 import { storyPromptText } from "../features/rplay/canvasContent";
+import { HelpButton } from "../features/help/HelpButton";
+import type { HelpTopicId } from "../features/help/topics";
 import "../styles/prompts.css";
 import "../styles/prompts-editor.css";
 import "../styles/prompts-lorebook.css";
@@ -59,6 +61,10 @@ export function PromptsPage() {
   const showVersionList = manager.activeTab !== "variables"
     && manager.activeTab !== "achievements"
     && !manager.focusMode;
+  const tabHelp: Partial<Record<typeof manager.activeTab, HelpTopicId>> = {
+    mainPrompt: "mainPrompt", worldStory: "worldStory", starterPrompt: "starterPrompt",
+    starterMessage: "starterMessage", variables: "variables", achievements: "achievements"
+  };
 
   return (
     <div className={manager.focusMode ? "prompt-page is-focused" : "prompt-page"}>
@@ -88,6 +94,7 @@ export function PromptsPage() {
           onChange={manager.setActiveTab}
           nodeType={manager.activeVersion?.nodeType ?? "start"}
         />
+        <div className="feature-help-context">이 항목 사용법 <HelpButton topic={tabHelp[manager.activeTab] ?? "prompts"} /></div>
       </header>
 
       {manager.activeTab === "variables" ? (
@@ -189,4 +196,3 @@ export function PromptsPage() {
     </div>
   );
 }
-

@@ -1,3 +1,4 @@
+import { rplayLorebookPriority } from "../model";
 import { normalizeLorebookTriggers, type LorebookEntry } from "../model";
 
 export type SimpleLorebookData = {
@@ -7,6 +8,7 @@ export type SimpleLorebookData = {
   triggers: string[];
   body: string;
   type?: string;
+  priority?: number;
 };
 
 export function buildRplayData(entries: LorebookEntry[], bodyLimit: number) {
@@ -15,6 +17,7 @@ export function buildRplayData(entries: LorebookEntry[], bodyLimit: number) {
     title: entry.title.trim().slice(0, 20),
     triggers: normalizeLorebookTriggers(entry.triggers),
     body: entry.body.slice(0, bodyLimit),
+    priority: rplayLorebookPriority(entry),
     type: entry.type
   }));
 }

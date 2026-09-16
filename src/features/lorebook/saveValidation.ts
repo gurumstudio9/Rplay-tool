@@ -14,6 +14,8 @@ export function validateLorebookSave(
   state: LorebookState,
   entries: LorebookEntry[]
 ): LorebookSaveValidation {
+  const invalidPriority = entries.find(entry => entry.priority !== undefined && (!Number.isSafeInteger(entry.priority) || entry.priority < 0));
+  if (invalidPriority) return { ok: false, entryId: invalidPriority.id, message: "우선순위는 0 이상의 정수로 입력하세요." };
   const identityErrors = lorebookIdentityErrors(entries);
   if (identityErrors.length) {
     return {

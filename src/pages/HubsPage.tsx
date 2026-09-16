@@ -115,7 +115,7 @@ function HubWorkspace({ workKey, workName }: { workKey: string; workName: string
               {direction === "in" && <label>대상 타입<select value={type} onChange={(event) => { setType(event.target.value as HubInputType); setCategory("all"); setQuery(""); }}>
                 {inputTypes.map((kind) => <option key={kind} value={kind}>{inputLabels[kind]}</option>)}
               </select></label>}
-              {direction === "in" && type === "lorebook" && <label>로어북 분류<select value={category} onChange={(event) => setCategory(event.target.value)}><option value="all">분류 전체</option>{lorebookTypeOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>}
+              {direction === "in" && type === "lorebook" && <label>로어북 분류<select value={category} onChange={(event) => setCategory(event.target.value)}><option value="all">분류 전체</option>{[...lorebookTypeOptions, ...[...new Set(catalog.lorebook.map(item => item.category).filter((id): id is string => Boolean(id)))].filter(id => !lorebookTypeOptions.some(([key]) => key === id)).map(id => [id, id] as const)].map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>}
               {direction === "out" && <label>스토리 종류<select value={category} onChange={(event) => setCategory(event.target.value)}><option value="all">전체</option><option value="start">시작 노드</option><option value="normal">일반 노드</option></select></label>}
               <label>대상 검색<input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="이름·키워드 검색" /></label>
             </div>

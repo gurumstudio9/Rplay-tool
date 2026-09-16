@@ -1,3 +1,4 @@
+import { rplayLorebookPriority } from "../model";
 import type { SimpleLorebookData } from "./data";
 
 export function buildRplayLorebookScript(
@@ -5,7 +6,7 @@ export function buildRplayLorebookScript(
   bodyLimit: number
 ) {
   return `(async () => {
-  const lorebookData = ${JSON.stringify(entries)};
+  const lorebookData = ${JSON.stringify(entries.map(entry => ({ ...entry, priority: rplayLorebookPriority({ ...entry, type: entry.type || "general" }) })))};
   const bodyLimit = ${JSON.stringify(bodyLimit)};
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -52,49 +53,6 @@ export function buildRplayLorebookScript(
     await sleep(30);
   }
 
-  const normalizeType = (type) => {
-    const t = String(type || "").trim().toLowerCase();
-    if (t === "mode" || t === "모드" || t === "명령어") return "command";
-    if (t === "지침" || t === "지침서") return "instruction";
-    if (t === "인물" || t === "캐릭터") return "person";
-    if (t === "인물서브" || t === "서브인물") return "person-sub";
-    if (t === "설정" || t === "세계관") return "setting";
-    if (t === "지역" || t === "장소") return "region";
-    if (t === "물건" || t === "아이템") return "item";
-    return t;
-  };
-
-  const typeOrder = [
-    "command",
-    "instruction",
-    "person",
-    "person-sub",
-    "person-gimmick",
-    "setting",
-    "region",
-    "region-sub",
-    "faction",
-    "item",
-    "gimmick",
-    "other",
-    "general"
-  ];
-  const priority = (type) => {
-    const norm = normalizeType(type);
-    const rplayPriority = {
-      instruction: 80,
-      person: 90,
-      region: 85,
-      "person-sub": 80,
-      "person-gimmick": 70
-    };
-    if (Object.prototype.hasOwnProperty.call(rplayPriority, norm)) {
-      return rplayPriority[norm];
-    }
-    const index = typeOrder.indexOf(norm || "general");
-    return index < 0 ? 10 : (typeOrder.length - index) * 10;
-  };
-
   const addButton = Array.from(document.querySelectorAll("button")).find(
     (button) => String(button.textContent || "").includes("매크로 프롬프트 추가")
   );
@@ -131,7 +89,7 @@ export function buildRplayLorebookScript(
       : card.querySelector('input[type="number"]');
 
     setValue(titleInput, item.title);
-    setValue(priorityInput, String(priority(item.type)));
+    setValue(priorityInput, String(item.priority));
     setEditable(bodyEditable, String(item.body || "").slice(0, bodyLimit));
     await sleep(30);
     for (const keyword of item.triggers || []) {

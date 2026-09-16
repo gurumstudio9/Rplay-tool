@@ -1,5 +1,5 @@
+import { usePromptLabels } from "./usePromptLabels";
 import {
-  promptTabLabels,
   type PromptDiffLine,
   type PromptTab
 } from "./model";
@@ -15,6 +15,7 @@ export function PromptDiffPanel({
   lines: PromptDiffLine[];
   versionCount: number;
 }) {
+  const promptTabLabels = usePromptLabels();
   if (!open) return null;
   return (
     <section className="prompt-diff-panel" aria-label="프롬프트 차이">

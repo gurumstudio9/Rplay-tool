@@ -1,16 +1,10 @@
-export const promptLorebookTypes = [
-  ["all", "타입 전체"],
-  ["general", "일반"],
-  ["command", "명령어"],
-  ["person", "인물"],
-  ["person-sub", "인물-서브"],
-  ["person-gimmick", "인물-기믹"],
-  ["setting", "설정"],
-  ["region", "지역"],
-  ["region-sub", "지역-서브"],
-  ["gimmick", "기믹"],
-  ["other", "기타"]
-] as const;
+import { lorebookTypeOptions, lorebookTypeLabel } from "../lorebook/model";
+export const promptLorebookTypes: ReadonlyArray<readonly [string, string]> = [["all", "타입 전체"], ...lorebookTypeOptions];
+
+export function availablePromptLorebookTypes(state: PromptLorebookState): [string, string][] {
+  const ids = new Set([...lorebookTypeOptions.map(([id]) => String(id)), ...Object.keys(record(state.typePriorities)), ...state.entries.map(entry => entry.type)]);
+  return [["all", "타입 전체"], ...[...ids].map(id => [id, lorebookTypeLabel(id)] as [string, string])];
+}
 
 export type PromptLorebookEntry = {
   id: string;
@@ -109,7 +103,7 @@ export function normalizePromptLorebookState(
 }
 
 export function promptLorebookTypeLabel(type: string) {
-  return promptLorebookTypes.find(([id]) => id === type)?.[1] ?? "일반";
+  return lorebookTypeLabel(type);
 }
 
 export function promptLorebookBodyUnavailable(

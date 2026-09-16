@@ -15,7 +15,31 @@ export const lorebookTypeOptions = [
   ["other", "기타"]
 ] as const;
 
-export type LorebookType = typeof lorebookTypeOptions[number][0];
+export type LorebookType = string;
+
+export const rplayDefaultPriorities: Record<string, number> = {
+  command: 130, mode: 130, instruction: 80, person: 90, "person-sub": 80,
+  "person-gimmick": 70, setting: 80, region: 85, "region-sub": 60,
+  faction: 50, item: 40, gimmick: 30, other: 20, general: 10
+};
+
+export function rplayTypePriority(type: string, priorities: Record<string, number> = {}) {
+  return Object.hasOwn(priorities, type) ? priorities[type]
+    : Object.hasOwn(rplayDefaultPriorities, type) ? rplayDefaultPriorities[type] : 10;
+}
+
+export function rplayLorebookPriority(entry: Pick<LorebookEntry, "type" | "priority" | "_typePriority">) {
+  return entry.priority ?? entry._typePriority ?? rplayTypePriority(entry.type);
+}
+
+export function availableLorebookTypes(state: Pick<LorebookState, "entries" | "typePriorities">): [string, string][] {
+  const ids = new Set([...lorebookTypeOptions.map(([id]) => String(id)), ...Object.keys(state.typePriorities), ...state.entries.map(entry => entry.type)]);
+  return [...ids].map(id => [id, lorebookTypeLabel(id)]);
+}
+
+export function applyLorebookTypePriorities(entries: LorebookEntry[], priorities: Record<string, number>) {
+  return entries.map(entry => ({ ...entry, _typePriority: rplayTypePriority(entry.type, priorities) }));
+}
 
 export type LorebookEntry = {
   id: string;
@@ -23,6 +47,8 @@ export type LorebookEntry = {
   sourceFileName: string;
   no: string;
   type: LorebookType;
+  priority?: number;
+  _typePriority?: number;
   title: string;
   triggers: string[];
   body: string;
@@ -39,6 +65,7 @@ export type LorebookEntry = {
 };
 
 export type LorebookState = {
+  typePriorities: Record<string, number>;
   bodyLimit: number;
   entries: LorebookEntry[];
   collectionRevision: string;
@@ -129,14 +156,12 @@ export function makeLorebookId(value: unknown) {
 
 export function normalizeLorebookType(value: unknown): LorebookType {
   const candidate = text(value || "general");
-  return lorebookTypeOptions.some(([id]) => id === candidate)
-    ? candidate as LorebookType
-    : "general";
+  return candidate;
 }
 
 export function lorebookTypeLabel(value: unknown) {
   const type = normalizeLorebookType(value);
-  return lorebookTypeOptions.find(([id]) => id === type)?.[1] ?? "일반";
+  return lorebookTypeOptions.find(([id]) => id === type)?.[1] ?? type;
 }
 
 export function normalizeLorebookTriggers(value: unknown): string[] {
@@ -168,7 +193,7 @@ function normalizeFileName(value: unknown, fallbackId: string) {
 export function reassignLorebookNumbers(entries: LorebookEntry[]) {
   const counters = new Map<string, number>();
   return entries.map((entry) => {
-    const prefix = typePrefixes[entry.type] || "I";
+    const prefix = Object.hasOwn(typePrefixes, entry.type) ? typePrefixes[entry.type] : "I";
     const count = (counters.get(prefix) ?? 0) + 1;
     counters.set(prefix, count);
     return {
@@ -199,6 +224,7 @@ export function normalizeLorebookEntry(
     ),
     no: text(source.no || index + 1),
     type: normalizeLorebookType(source.type),
+    priority: source.priority === undefined || source.priority === null || source.priority === "" ? undefined : Number(source.priority),
     title: text(source.title),
     triggers: normalizeLorebookTriggers(source.triggers),
     body: normalizeLorebookBody(source.body),
@@ -221,9 +247,11 @@ export function normalizeLorebookState(
   defaultBodyLimit = 500
 ): LorebookState {
   const source = record(value);
-  const entries = Array.isArray(source.entries)
+  const typePriorities = Object.fromEntries(Object.entries(record(source.typePriorities))
+    .filter(([id, value]) => id.trim() && typeof value === "number" && Number.isSafeInteger(value) && value >= 0).map(([id, value]) => [id, Number(value)]));
+  const entries = applyLorebookTypePriorities(Array.isArray(source.entries)
     ? source.entries.map(normalizeLorebookEntry)
-    : [];
+    : [], typePriorities);
   const ordered = entries
     .map((entry, index) => ({ entry, index }))
     .sort((left, right) => {
@@ -234,6 +262,7 @@ export function normalizeLorebookState(
     .map(({ entry }) => entry);
   return {
     ...source,
+    typePriorities,
     bodyLimit: Math.max(1, Number(source.bodyLimit ?? defaultBodyLimit)),
     entries: reassignLorebookNumbers(ordered),
     collectionRevision: text(source.collectionRevision),
@@ -330,10 +359,12 @@ export function stripLorebookAnchor(value: unknown) {
 
 export function portableLorebookState(state: LorebookState) {
   return {
+    typePriorities: state.typePriorities,
     bodyLimit: state.bodyLimit,
     entries: state.entries.map((entry) => {
       const portable = { ...entry };
       [
+        "_typePriority",
         "sourceFileName",
         "bodyStorage",
         "bodyFile",

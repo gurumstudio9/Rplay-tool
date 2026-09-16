@@ -631,5 +631,3 @@
 .prompt-node-heading { display: flex; align-items: center; gap: 12px; padding: 8px 0 14px; flex-wrap: wrap; }
 .prompt-node-kind { color: var(--accent, #d0b46d); border: 1px solid currentColor; border-radius: 6px; padding: 4px 9px; font-size: 12px; }
 .prompt-node-heading > strong { flex: 1; }
-.prompt-legacy-addition { padding: 16px; }
-.prompt-legacy-addition textarea { width: 100%; min-height: 160px; }

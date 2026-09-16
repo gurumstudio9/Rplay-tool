@@ -1,3 +1,5 @@
+import { LorebookTypeSettings } from "../features/lorebook/LorebookTypeSettings";
+import { availableLorebookTypes, rplayTypePriority } from "../features/lorebook/model";
 import { LorebookBulkBar } from "../features/lorebook/LorebookBulkBar";
 import { LorebookCommandBar } from "../features/lorebook/LorebookCommandBar";
 import { LorebookEditor } from "../features/lorebook/LorebookEditor";
@@ -21,6 +23,8 @@ export function LorebookPage() {
   const workKey = `${activeWorkId}::${activePlatformId}`;
   const manager = useLorebookManager(workKey);
   const platform = useLorebookPlatformCopy(workKey, manager);
+  const typeOptions = availableLorebookTypes(manager.draftState);
+  const isRplay = activePlatformId === "알플레이";
   const selectedOrder = manager.selectedEntry
     ? manager.draftState.entries.findIndex(
         (entry) => entry.id === manager.selectedEntry?.id
@@ -94,6 +98,7 @@ export function LorebookPage() {
             }
           </label>
           <LorebookBulkBar
+            typeOptions={typeOptions}
             open={manager.bulkMode}
             selectedCount={manager.bulkSelectedIds.size}
             totalCount={manager.draftState.entries.length}
@@ -129,7 +134,10 @@ export function LorebookPage() {
         </section>
       ) : null}
 
+      {isRplay && <LorebookTypeSettings key={workKey} state={manager.draftState} disabled={disabled} onChange={manager.updateTypePriority} />}
+
       <LorebookFilters
+        typeOptions={typeOptions}
         query={manager.query}
         typeFilter={manager.typeFilter}
         filteredCount={manager.filteredEntries.length}
@@ -147,6 +155,9 @@ export function LorebookPage() {
 
       {!manager.bulkMode ? (
         <LorebookEditor
+          rplay={isRplay}
+          typeOptions={typeOptions}
+          defaultPriority={rplayTypePriority(manager.selectedEntry?.type ?? "general", manager.draftState.typePriorities)}
           entry={manager.selectedEntry}
           order={selectedOrder}
           bodyLimit={manager.draftState.bodyLimit}

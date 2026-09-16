@@ -1,5 +1,4 @@
 import {
-  promptTabLabels,
   type PromptVersion
 } from "./model";
 

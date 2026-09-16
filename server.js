@@ -284,6 +284,20 @@ function loreMarkdownFiles(lbDir) {
     .map((fileName) => [fileName.toLocaleLowerCase(), fileName]));
 }
 
+function loreSettingsPath(lbDir) {
+  return path.join(path.dirname(lbDir), "lorebook-settings.json");
+}
+
+function loreTypePriorities(lbDir) {
+  return readJson(loreSettingsPath(lbDir), {})?.typePriorities || {};
+}
+
+function validLoreTypePriorities(value) {
+  return value && typeof value === "object" && !Array.isArray(value)
+    && Object.entries(value).every(([key, priority]) => key.trim() && key === key.trim()
+      && key.length <= 80 && Number.isSafeInteger(priority) && priority >= 0);
+}
+
 function loreCollectionSnapshot(lbDir) {
   const hash = crypto.createHash("sha256");
   hash.update("lorebook-collection-v1\0", "utf8");
@@ -294,6 +308,17 @@ function loreCollectionSnapshot(lbDir) {
     : [];
   const jsonFiles = files.filter((fileName) => /\.json$/i.test(fileName));
   const invalidJsonFiles = [];
+  const settingsFile = loreSettingsPath(lbDir);
+  if (fs.existsSync(settingsFile)) {
+    hash.update("lorebook-settings.json\0", "utf8");
+    try {
+      const raw = fs.readFileSync(settingsFile);
+      hash.update(raw);
+      if (!validLoreTypePriorities(JSON.parse(raw.toString("utf8").replace(/^\uFEFF/, "")).typePriorities)) {
+        invalidJsonFiles.push("../lorebook-settings.json");
+      }
+    } catch { invalidJsonFiles.push("../lorebook-settings.json"); hash.update("!unreadable"); }
+  }
 
   files.forEach((fileName) => {
     const filePath = path.join(lbDir, fileName);
@@ -383,7 +408,7 @@ function loreMetadata(entry, fileName, paired) {
   const metadata = { ...entry };
   [
     "fileName", "sourceFileName", "bodyFileName", "sourceBodyFileName", "bodySource",
-    "bodyStatus", "bodyRevision", "bodyModifiedAt", "migrateBodyToMarkdown", "repairMissingBody"
+    "bodyStatus", "bodyRevision", "bodyModifiedAt", "migrateBodyToMarkdown", "repairMissingBody", "_typePriority"
   ].forEach((field) => delete metadata[field]);
   if (paired) {
     delete metadata.body;
@@ -438,6 +463,7 @@ function isLoreEntryContentChanged(newEntry, oldEntry) {
     newEntry.title !== oldEntry.title ||
     newEntry.body !== oldEntry.body ||
     newEntry.type !== oldEntry.type ||
+    newEntry.priority !== oldEntry.priority ||
     !sameJsonValue(newEntry.triggers, oldEntry.triggers)
   );
 }
@@ -1021,6 +1047,7 @@ async function handleApi(request, response, url) {
             found: true,
             value: {
               entries,
+              typePriorities: loreTypePriorities(lbDir),
               collectionRevision: snapshot.collectionRevision,
               invalidJsonFiles: snapshot.invalidJsonFiles
             }
@@ -1030,8 +1057,9 @@ async function handleApi(request, response, url) {
             found: true,
             value: {
               entries: [],
+              typePriorities: loreTypePriorities(lbDir),
               collectionRevision: snapshot.collectionRevision,
-              invalidJsonFiles: []
+              invalidJsonFiles: snapshot.invalidJsonFiles
             }
           });
         }
@@ -1122,6 +1150,12 @@ async function handleApi(request, response, url) {
             sendJson(response, 409, {
               error: "로어북 파일이 다른 창이나 외부 편집기에서 변경되었습니다. 새로고침한 뒤 변경 내용을 다시 적용해 주세요."
             });
+            return true;
+          }
+          const typePriorities = valueToSave.typePriorities ?? loreTypePriorities(lbDir);
+          if (!validLoreTypePriorities(typePriorities) || valueToSave.entries.some(entry => entry?.priority != null
+            && (!Number.isSafeInteger(entry.priority) || entry.priority < 0))) {
+            sendJson(response, 400, { error: "타입 이름은 1~80자, 우선순위는 0 이상의 정수로 입력하세요." });
             return true;
           }
           const files = snapshot.jsonFiles;
@@ -1302,6 +1336,10 @@ async function handleApi(request, response, url) {
             return true;
           }
 
+          if (JSON.stringify(typePriorities) !== JSON.stringify(loreTypePriorities(lbDir))) {
+            const settingsFile = loreSettingsPath(lbDir);
+            writeJson(settingsFile, { ...readJson(settingsFile, {}), typePriorities });
+          }
           const refreshedMarkdownFiles = loreMarkdownFiles(lbDir);
           const responseEntries = prepared.map((record) => {
             const refreshed = readLoreRecord(lbDir, record.fileName, refreshedMarkdownFiles);
@@ -1314,6 +1352,7 @@ async function handleApi(request, response, url) {
           const { migrateLegacyBodies, migration: ignoredMigration, ...responseState } = valueToSave;
           responseValue = {
             ...responseState,
+            typePriorities,
             entries: responseEntries,
             collectionRevision: loreCollectionSnapshot(lbDir).collectionRevision,
             invalidJsonFiles: [],

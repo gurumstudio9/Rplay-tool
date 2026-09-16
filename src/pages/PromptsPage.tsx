@@ -62,7 +62,7 @@ export function PromptsPage() {
     && manager.activeTab !== "achievements"
     && !manager.focusMode;
   const tabHelp: Partial<Record<typeof manager.activeTab, HelpTopicId>> = {
-    mainPrompt: "mainPrompt", worldStory: "worldStory", starterPrompt: "starterPrompt",
+    mainPrompt: "mainPrompt", additionalPrompt: "additionalPrompt", worldStory: "worldStory", starterPrompt: "starterPrompt",
     starterMessage: "starterMessage", variables: "variables", achievements: "achievements"
   };
 
@@ -95,6 +95,7 @@ export function PromptsPage() {
           nodeType={manager.activeVersion?.nodeType ?? "start"}
         />
         <div className="feature-help-context">이 항목 사용법 <HelpButton topic={tabHelp[manager.activeTab] ?? "prompts"} /></div>
+        <p className="prompt-canvas-mapping">중요 정보 = 각 노드의 메인 + 에디셔널 (4,300토큰) · 전체 스토리 (30,000토큰) · 시작 노드만 시작 메시지 (1,000토큰)와 시작 가이드 (300토큰)를 사용합니다.</p>
       </header>
 
       {manager.activeTab === "variables" ? (
@@ -129,10 +130,10 @@ export function PromptsPage() {
                 key={`${workKey}:${manager.activeTab}`}
                 storageKey={`prompt-token-limit:${workKey}:${manager.activeTab}`}
                 text={manager.activeText}
-                combinedText={manager.activeTab === "mainPrompt"
+                combinedText={manager.activeTab === "mainPrompt" || manager.activeTab === "additionalPrompt"
                   ? storyPromptText(manager.state.mainPrompt, manager.activeVersion?.additionalPrompt)
                   : undefined}
-                defaultLimit={manager.activeTab === "mainPrompt" ? 7500 : undefined}
+                defaultLimit={manager.activeTab === "mainPrompt" || manager.activeTab === "additionalPrompt" ? 4300 : manager.activeTab === "worldStory" ? 30000 : manager.activeTab === "starterMessage" ? 1000 : manager.activeTab === "starterPrompt" ? 300 : undefined}
               />
             ) : null}
             <PromptEditor
@@ -152,14 +153,6 @@ export function PromptsPage() {
               onToggleDiff={() => manager.setShowDiff(!manager.showDiff)}
               diffOpen={manager.showDiff}
             />
-            {manager.activeTab === "mainPrompt" && manager.activeVersion?.additionalPrompt ? (
-              <details className="prompt-legacy-addition">
-                <summary>이 노드의 기존 추가 지침</summary>
-                <p>공통 메인 프롬프트 뒤에 함께 적용됩니다.</p>
-                <textarea aria-label="기존 추가 지침" value={manager.activeVersion.additionalPrompt}
-                  onChange={event => manager.replaceState({ ...manager.state, versions: manager.state.versions.map(version => version.id === manager.state.activeVersionId ? { ...version, additionalPrompt: event.target.value } : version) })} />
-              </details>
-            ) : null}
             <PromptDiffPanel
               open={manager.showDiff}
               tab={manager.activeTab}

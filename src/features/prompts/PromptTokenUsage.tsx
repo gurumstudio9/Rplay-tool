@@ -71,7 +71,7 @@ export function PromptTokenUsage({
     <section className={`prompt-token-usage${exceeded ? " is-over-limit" : ""}`} aria-label="알플레이 토큰 사용량">
       <div className="prompt-token-summary" aria-live="polite">
         <strong>{failed ? "토큰 계산 실패" : ready ? `현재 본문 ${format(result.current)}토큰` : "토큰 계산 중…"}</strong>
-        {ready && combinedText !== undefined ? <span>메인 + 이 노드의 추가 지침 {format(result.total)}토큰</span> : null}
+        {ready && combinedText !== undefined ? <span>각 노드의 메인 + 에디셔널 {format(result.total)}토큰</span> : null}
         <small>o200k_base · 변수 치환 전</small>
       </div>
       <label className="prompt-token-limit">

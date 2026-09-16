@@ -5,6 +5,7 @@ import {
 import { useState } from "react";
 
 type Props = {
+  typeOptions?: ReadonlyArray<readonly [string, string]>;
   open: boolean;
   selectedCount: number;
   totalCount: number;
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export function LorebookBulkBar({
+  typeOptions = lorebookTypeOptions,
   open,
   selectedCount,
   totalCount,
@@ -53,7 +55,7 @@ export function LorebookBulkBar({
               value={selectionType}
               onChange={(event) => setSelectionType(event.target.value as LorebookType)}
             >
-              {lorebookTypeOptions.map(([id, label]) => (
+              {typeOptions.map(([id, label]) => (
                 <option key={id} value={id}>{label}</option>
               ))}
             </select>
@@ -78,7 +80,7 @@ export function LorebookBulkBar({
               onChange={(event) => setTargetType(event.target.value as LorebookType)}
               disabled={selectedCount === 0}
             >
-              {lorebookTypeOptions.map(([id, label]) => (
+              {typeOptions.map(([id, label]) => (
                 <option key={id} value={id}>{label}</option>
               ))}
             </select>

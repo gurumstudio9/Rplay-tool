@@ -29,7 +29,7 @@ export function canvasBatchItems(canvas: JsonObject, tab: CanvasBatchTab, source
     items.push({ id: `${tab}:${id}`, title, kind, status: status === "source-only" ? "missing" : status === "canvas-only" ? "legacy" : "blocked", nodeUid: nodeUid || undefined, add, triggerUid: triggerUid || undefined });
   }
   if (tab === "lorebook") for (const row of compareCanvasLorebooks(canvas, sources.lorebooks)) {
-    push(row.id, row.title, lorebookTypeOptions.find(([id]) => id === row.source?.type)?.[1] || "분류 없음", row.status, row.nodeUid, row.source ? (next) => addCanvasLorebook(next, row.source!) : undefined);
+    push(row.id, row.title, lorebookTypeOptions.find(([id]) => id === row.source?.type)?.[1] || row.source?.type || "분류 없음", row.status, row.nodeUid, row.source ? (next) => addCanvasLorebook(next, row.source!) : undefined);
   }
   if (tab === "character") for (const row of compareCanvasCharacters(canvas, sources.characters)) {
     push(row.id, row.name, row.group ? groupLabels[row.group] : "분류 없음", row.status, row.nodeUid, row.source ? (next) => addCanvasCharacter(next, row.source!) : undefined);

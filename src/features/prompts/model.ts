@@ -286,6 +286,6 @@ export function convertStarterMessageForEden(
 
 export function promptTabsForNode(nodeType: PromptNodeType): PromptTab[] {
   return nodeType === "start"
-    ? ["mainPrompt", "worldStory", "starterPrompt", "starterMessage"]
-    : ["mainPrompt", "worldStory"];
+    ? ["mainPrompt", "additionalPrompt", "worldStory", "starterPrompt", "starterMessage"]
+    : ["mainPrompt", "additionalPrompt", "worldStory"];
 }

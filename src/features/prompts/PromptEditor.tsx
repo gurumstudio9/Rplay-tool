@@ -1,3 +1,4 @@
+import { usePromptLabels } from "./usePromptLabels";
 import { ToolbarSlot } from "../workspace/WorkspaceSidebar";
 import { AutoTextarea } from "../workspace/AutoTextarea";
 import { TokenCount } from "../workspace/TokenCount";
@@ -8,7 +9,6 @@ import {
   useState
 } from "react";
 import {
-  promptTabLabels,
   type PromptTab,
   type PromptVersion
 } from "./model";
@@ -49,6 +49,7 @@ export function PromptEditor({
   onToggleDiff,
   diffOpen
 }: PromptEditorProps) {
+  const promptTabLabels = usePromptLabels();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [query, setQuery] = useState("");
   const [matchIndex, setMatchIndex] = useState(0);

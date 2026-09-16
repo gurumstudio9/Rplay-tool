@@ -1,4 +1,4 @@
-import type { LorebookEntry } from "../lorebook/model";
+import { rplayLorebookPriority, type LorebookEntry } from "../lorebook/model";
 import type {
   PromptState,
   PromptVersion,
@@ -224,21 +224,6 @@ function groupBy<T>(items: T[], keyFor: (item: T) => string) {
   return grouped;
 }
 
-function lorebookPriority(type: string) {
-  const priorities: Record<string, number> = {
-    command: 100,
-    person: 90,
-    "person-sub": 80,
-    "person-gimmick": 70,
-    region: 85,
-    "region-sub": 55,
-    setting: 50,
-    gimmick: 45,
-    general: 40
-  };
-  return priorities[type] ?? 10;
-}
-
 function estimateTokenCount(value: string) {
   return value ? Math.ceil(value.length / 1.5) : 0;
 }
@@ -365,7 +350,7 @@ function lorebookMatches(source: LorebookEntry, metadata: JsonObject) {
   const sourceTriggers = source.triggers.map(normalizedText).filter(Boolean);
   const canvasPatterns = stringArray(entry.patterns);
   const rawPriority = Number(entry.priority);
-  const sourcePriority = lorebookPriority(source.type);
+  const sourcePriority = rplayLorebookPriority(source);
   const details = {
     bodyMatches: normalizedText(entry.text) === normalizedText(source.body),
     keyMatches: normalizedText(entry.key) === sourceTriggers.join("|"),
@@ -483,7 +468,7 @@ export function compareCanvasLorebooks(
           canvasKey: normalizedText(loreEntry?.key),
           canvasPatterns: stringArray(loreEntry?.patterns),
           canvasPriority: undefined,
-          sourcePriority: source ? lorebookPriority(source.type) : 0
+          sourcePriority: source ? rplayLorebookPriority(source) : 0
         };
     let status: CanvasContentStatus;
     if (sourceMatches.length > 1 || canvasMatches.length > 1) status = "duplicate";
@@ -530,7 +515,7 @@ export function updateCanvasLorebook(
       patterns: triggers,
       text: source.body,
       tokenCount: estimateTokenCount(source.body),
-      priority: lorebookPriority(source.type)
+      priority: rplayLorebookPriority(source)
     },
     ...entries.slice(1)
   ];
@@ -585,7 +570,7 @@ export function addCanvasLorebook(
       patterns: triggers,
       text: source.body,
       tokenCount: estimateTokenCount(source.body),
-      priority: lorebookPriority(source.type),
+      priority: rplayLorebookPriority(source),
       durationTurns: 1,
       activationMode: "keyword"
     }],

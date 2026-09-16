@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useWorks } from "../works/WorkContext";
 
-export function TokenCount({ text }: { text: string }) {
+export function TokenCount({ text, limit }: { text: string; limit?: number }) {
   const { activePlatformId } = useWorks();
   const enabled = activePlatformId === "알플레이";
   const [result, setResult] = useState<{ text: string; count: number | null } | null>(null);
@@ -28,7 +28,7 @@ export function TokenCount({ text }: { text: string }) {
     ? "토큰 계산 중…"
     : result.count === null
       ? "토큰 계산 실패"
-      : `${result.count.toLocaleString("ko-KR")}토큰`;
+      : `${result.count.toLocaleString("ko-KR")}${limit ? ` / ${limit.toLocaleString("ko-KR")}` : ""}토큰`;
 
-  return <span className="inline-token-count" title="o200k_base · 변수 치환 전" aria-live="polite"> · {label}</span>;
+  return <span className={`inline-token-count${limit && result?.text === text && result.count !== null && result.count > limit ? " is-warning" : ""}`} title="o200k_base · 변수 치환 전" aria-live="polite"> · {label}</span>;
 }

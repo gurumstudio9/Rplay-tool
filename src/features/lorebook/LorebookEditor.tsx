@@ -12,6 +12,9 @@ import {
 } from "./model";
 
 type Props = {
+  rplay?: boolean;
+  defaultPriority?: number;
+  typeOptions?: ReadonlyArray<readonly [string, string]>;
   entry: LorebookEntry | null;
   order: number;
   bodyLimit: number;
@@ -23,6 +26,9 @@ type Props = {
 };
 
 export function LorebookEditor({
+  rplay = false,
+  defaultPriority = 10,
+  typeOptions = lorebookTypeOptions,
   entry,
   order,
   bodyLimit,
@@ -75,7 +81,7 @@ export function LorebookEditor({
             onChange={(event) => onChange({ type: event.target.value as LorebookEntry["type"] })}
             disabled={disabled}
           >
-            {lorebookTypeOptions.map(([id, label]) => (
+            {typeOptions.map(([id, label]) => (
               <option key={id} value={id}>{label}</option>
             ))}
           </select>
@@ -105,6 +111,14 @@ export function LorebookEditor({
           <input value={entry.no} readOnly />
         </label>
       </div>
+
+      {rplay && <div className="lore-entry-priority">
+        <label>항목 우선순위<input aria-label="항목 우선순위" type="number" min="0" step="1" disabled={disabled}
+          value={entry.priority ?? ""} placeholder={`타입 기본값 ${defaultPriority}`}
+          onChange={event => onChange({ priority: event.target.value === "" ? undefined : Number(event.target.value) })} /></label>
+        <span>적용 우선순위: {entry.priority ?? defaultPriority} · {entry.priority === undefined ? "타입 기본값 사용" : "항목별 지정"}</span>
+        <button type="button" disabled={disabled || entry.priority === undefined} onClick={() => onChange({ priority: undefined })}>타입 기본값으로</button>
+      </div>}
 
       {errors.length ? (
         <div className="lore-editor-error" role="alert">{errors.join(" · ")}</div>

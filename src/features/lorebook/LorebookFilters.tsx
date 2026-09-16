@@ -5,6 +5,7 @@ import {
 } from "./model";
 
 type Props = {
+  typeOptions?: ReadonlyArray<readonly [string, string]>;
   query: string;
   typeFilter: "all" | LorebookType;
   filteredCount: number;
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export function LorebookFilters({
+  typeOptions = lorebookTypeOptions,
   query,
   typeFilter,
   filteredCount,
@@ -36,7 +38,7 @@ export function LorebookFilters({
           onChange={(event) => onTypeChange(event.target.value as "all" | LorebookType)}
         >
           <option value="all">타입 전체</option>
-          {lorebookTypeOptions.map(([id, label]) => (
+          {typeOptions.map(([id, label]) => (
             <option key={id} value={id}>{label}</option>
           ))}
         </select>

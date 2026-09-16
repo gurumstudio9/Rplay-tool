@@ -1,3 +1,4 @@
+import { useWorks } from "../works/WorkContext";
 import { ToolbarSlot } from "../workspace/WorkspaceSidebar";
 import { AutoTextarea } from "../workspace/AutoTextarea";
 import { TokenCount } from "../workspace/TokenCount";
@@ -40,6 +41,8 @@ export function CharacterEditor({
   onSubmit,
   onBlur
 }: CharacterEditorProps) {
+  const { activePlatformId } = useWorks();
+  const isRplay = activePlatformId === "알플레이";
   return (
     <section className="settings-panel settings-editor-panel" tabIndex={-1}>
       <header className="settings-panel-header">
@@ -233,14 +236,14 @@ export function CharacterEditor({
           {textareaFields.map(({ field, label, rows, placeholder, maxLength }) => (
             <label className="settings-span-2" key={field}>
               <span className="settings-label-row">
-                <span>{label}{field === "introduction" ? " (최대 300자)" : ""}</span>
-                {field === "prompt" ? <small>{form.prompt.length}자<TokenCount text={form.prompt} /></small> : null}
+                <span>{isRplay && field === "prompt" ? "중요 정보 (프롬프트)" : isRplay && field === "background" ? "상세 설명" : label}{field === "introduction" ? " (최대 300자)" : ""}</span>
+                {field === "prompt" || (isRplay && field === "background") ? <small>{form[field].length}자<TokenCount text={form[field]} limit={isRplay ? field === "prompt" ? 300 : 30000 : undefined} /></small> : null}
               </span>
               <AutoTextarea
                 rows={rows}
                 value={form[field]}
                 maxLength={maxLength}
-                placeholder={placeholder}
+                placeholder={isRplay && field === "prompt" ? "캐릭터가 중요하게 지켜야 할 말투·성격·행동 패턴" : isRplay && field === "background" ? "캐릭터의 특징·정보·관계·배경 설정" : placeholder}
                 onChange={(event) => onUpdate(field, event.target.value)}
               />
             </label>

@@ -3,6 +3,14 @@ import { createPortal } from "react-dom";
 import { helpTopics, type HelpTopicId } from "./topics";
 import "../../styles/help.css";
 
+const screenGuideSections: Partial<Record<HelpTopicId, string>> = {
+  settings: "settings", prompts: "prompts", mainPrompt: "prompts", additionalPrompt: "prompts",
+  worldStory: "prompts", starterPrompt: "prompts", starterMessage: "prompts",
+  lorebook: "lorebook", assets: "assets", variables: "variables", achievements: "achievements",
+  hubs: "hubs", canvasHub: "hubs", rplay: "canvas", canvasEdit: "canvas",
+  canvasBatch: "canvas", canvasCharacter: "canvas", roundtrip: "checks", analyzer: "checks"
+};
+
 export function HelpButton({ topic, label }: { topic: HelpTopicId; label?: string }) {
   const [open, setOpen] = useState(false);
   const [activeTopic, setActiveTopic] = useState(topic);
@@ -44,6 +52,7 @@ export function HelpButton({ topic, label }: { topic: HelpTopicId; label?: strin
             {activeTopic !== "guide" ? <button type="button" onClick={() => setActiveTopic("guide")}>처음 사용 순서 보기</button>
               : topic !== "guide" && <button type="button" onClick={() => setActiveTopic(topic)}>이 기능 도움말로 돌아가기</button>}
             <a href="/guide/index.html" target="_blank" rel="noreferrer">화면으로 따라하기</a>
+            <a href={`/guide/screens.html${screenGuideSections[activeTopic] ? `#${screenGuideSections[activeTopic]}` : ""}`} target="_blank" rel="noreferrer">입력 항목 → 캔버스 반영 안내</a>
             <a href="/사용가이드.md" download="알플레이_캔버스툴_사용가이드.md">전체 가이드 내려받기 (.md)</a>
           </footer>
         </div>

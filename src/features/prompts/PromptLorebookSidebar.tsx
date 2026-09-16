@@ -4,7 +4,7 @@ import {
   promptLorebookBodyLabel,
   promptLorebookBodyUnavailable,
   promptLorebookTypeLabel,
-  promptLorebookTypes,
+  availablePromptLorebookTypes,
   type PromptLorebookEntry
 } from "./lorebookModel";
 import type { usePromptLorebook } from "./usePromptLorebook";
@@ -24,6 +24,7 @@ export function PromptLorebookSidebar({
 }: PromptLorebookSidebarProps) {
   if (!open) return null;
   const draft = lorebook.draft;
+  const typeOptions = availablePromptLorebookTypes(lorebook.state);
   return (
     <SidebarSection order={40}>
       <aside className="prompt-lorebook" aria-label="로어북 사전">
@@ -48,6 +49,7 @@ export function PromptLorebookSidebar({
 
       {lorebook.editorOpen && draft ? (
         <LorebookEditor
+          typeOptions={typeOptions}
           draft={draft}
           editing={Boolean(lorebook.editingId)}
           saving={lorebook.status === "saving"}
@@ -67,7 +69,7 @@ export function PromptLorebookSidebar({
               value={lorebook.typeFilter}
               onChange={(event) => lorebook.setTypeFilter(event.target.value)}
             >
-              {promptLorebookTypes.map(([id, label]) => (
+              {typeOptions.map(([id, label]) => (
                 <option value={id} key={id}>{label}</option>
               ))}
             </select>
@@ -131,6 +133,7 @@ export function PromptLorebookSidebar({
 }
 
 function LorebookEditor({
+  typeOptions,
   draft,
   editing,
   saving,
@@ -140,6 +143,7 @@ function LorebookEditor({
   onSave,
   onDelete
 }: {
+  typeOptions: [string, string][];
   draft: PromptLorebookEntry;
   editing: boolean;
   saving: boolean;
@@ -162,7 +166,7 @@ function LorebookEditor({
           value={draft.type}
           onChange={(event) => onChange({ type: event.target.value })}
         >
-          {promptLorebookTypes.filter(([id]) => id !== "all").map(
+          {typeOptions.filter(([id]) => id !== "all").map(
             ([id, label]) => <option value={id} key={id}>{label}</option>
           )}
         </select>

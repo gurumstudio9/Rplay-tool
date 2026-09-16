@@ -16,6 +16,7 @@ import {
   matchesLorebookEntry
 } from "./filtering";
 import {
+  applyLorebookTypePriorities,
   blankLorebookEntry,
   cloneLorebookState,
   lorebookDefaultBodyLimit,
@@ -118,7 +119,7 @@ export function useLorebookManager(activeWorkId: string) {
     const nextId = patch.id === undefined ? previousId : String(patch.id).trim();
     setDraftState((current) => ({
       ...current,
-      entries: updateLorebookEntry(current.entries, previousId, patch)
+      entries: applyLorebookTypePriorities(updateLorebookEntry(current.entries, previousId, patch), current.typePriorities)
     }));
     if (nextId !== previousId) {
       setSelectedId(nextId);
@@ -235,7 +236,7 @@ export function useLorebookManager(activeWorkId: string) {
     const selectedCount = bulkSelectedIds.size;
     setDraftState((current) => ({
       ...current,
-      entries: applyLorebookBulkType(current.entries, bulkSelectedIds, type)
+      entries: applyLorebookTypePriorities(applyLorebookBulkType(current.entries, bulkSelectedIds, type), current.typePriorities)
     }));
     setBulkSelectedIds(new Set());
     announce(`${selectedCount}개 항목의 타입을 변경했습니다.`);
@@ -271,6 +272,14 @@ export function useLorebookManager(activeWorkId: string) {
         : entry)
     }));
     announce(`${targets.length}개 항목의 MD 분리를 예약했습니다.`);
+  }
+
+  function updateTypePriority(type: string, priority: number) {
+    if (!type.trim() || !Number.isSafeInteger(priority) || priority < 0) return;
+    setDraftState(current => {
+      const typePriorities = { ...current.typePriorities, [type.trim()]: priority };
+      return { ...current, typePriorities, entries: applyLorebookTypePriorities(current.entries, typePriorities) };
+    });
   }
 
   function updateBodyLimit(value: number) {
@@ -378,6 +387,7 @@ export function useLorebookManager(activeWorkId: string) {
     applyBulkType,
     splitBodiesToMarkdown,
     updateBodyLimit,
+    updateTypePriority,
     saveChanges,
     cancelChanges,
     replaceDraftFromImport,

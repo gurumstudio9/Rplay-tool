@@ -28,16 +28,53 @@
 
 기본 주소는 `http://127.0.0.1:4174`입니다. 기존 관리툴과 다른 포트를 사용합니다. Node.js가 필요하며, 작품 MD 내보내기는 Python 3.9 이상이 필요합니다. `PYTHON_EXECUTABLE`로 Python 경로를 지정할 수 있습니다.
 
-이 저장소는 소스 배포본입니다. Git, Node.js 22 이상, pnpm이 필요합니다. Node.js를 설치한 뒤 `npm install -g pnpm`으로 pnpm을 준비할 수 있습니다. 처음 한 번 다음 명령을 실행합니다.
+이 저장소는 **소스 배포본**입니다. GitHub에서 받은 ZIP은 설치 없이 실행되는 포터블 버전이 아닙니다. 처음 한 번 Node.js 설치, 라이브러리 설치, 화면 빌드가 필요합니다. AI는 필수가 아니며, 설치가 어렵다면 아래 **AI에게 설치·오류 해결을 요청하기**의 양식을 README와 함께 전달하세요.
 
-```sh
+### 1. 실행 환경 준비
+
+- **Node.js 22 이상:** [공식 다운로드](https://nodejs.org/en/download)에서 Windows용 LTS 설치 파일로 설치합니다. 설치가 끝나면 열려 있던 터미널을 닫고 새로 엽니다.
+- **pnpm 10:** 이 프로젝트의 기존 설치 환경은 `10.15.1`입니다. 아래 명령은 같은 버전을 설치합니다. [pnpm 공식 설치 안내](https://pnpm.io/installation)도 참고할 수 있습니다.
+- **Git:** `git clone`으로 받을 때만 필요합니다. ZIP 다운로드에는 필요하지 않습니다.
+- **Python 3.9 이상:** 작품 전체 MD 내보내기를 사용할 때만 추가로 필요합니다. 기본 편집과 캔버스 JSON 작업에는 필요하지 않습니다.
+
+아래 명령은 Windows **명령 프롬프트(cmd)** 기준입니다. 한 줄씩 실행하고, 오류가 나오면 다음 단계로 넘어가기 전에 오류를 확인하세요. 설치·빌드 때는 인터넷 연결이 필요합니다.
+
+```bat
+node --version
+npm --version
+npm install -g pnpm@10.15.1
+pnpm --version
+```
+
+`node --version`은 `v22` 이상, `pnpm --version`은 `10.15.1`이 표시되면 됩니다.
+
+### 2. 프로그램 받기
+
+**ZIP으로 받는 경우:** [GitHub 저장소](https://github.com/gurumstudio9/Rplay-tool)에서 **Code → Download ZIP**을 누르고 압축을 모두 풉니다. 압축 파일 안에서 바로 실행하지 마세요. `package.json`과 `실행.cmd`가 함께 보이는 폴더를 탐색기로 연 뒤, 주소창에 `cmd`를 입력하고 Enter를 누르면 그 폴더에서 명령 프롬프트가 열립니다. 폴더 이름은 `Rplay-tool-main` 등으로 표시될 수 있습니다.
+
+**Git으로 받는 경우:** Git을 설치한 뒤, 프로그램을 둘 상위 폴더에서 다음 명령을 실행합니다.
+
+```bat
 git clone https://github.com/gurumstudio9/Rplay-tool.git
 cd Rplay-tool
+```
+
+### 3. 처음 한 번 설치·빌드
+
+ZIP과 Git 모두 `package.json`이 있는 폴더에서 실행합니다.
+
+```bat
 pnpm install --frozen-lockfile
 pnpm build
 ```
 
-이후 Windows에서 `실행.cmd`를 엽니다. `node_modules`, 빌드 결과 `dist`, Node.js·Python 실행 환경과 작품 데이터는 저장소에 포함하지 않습니다.
+첫 명령은 필요한 라이브러리를 `node_modules/`에 설치하고, 두 번째 명령은 화면을 `dist/`에 만듭니다. 두 명령이 오류 없이 끝나고 `dist/index.html`이 생겼으면 준비가 끝났습니다.
+
+### 4. 실행·종료
+
+이후에는 `실행.cmd`를 더블클릭합니다. 브라우저에서 작품 선택 화면이 열리면 정상입니다. 브라우저가 자동으로 열리지 않으면 서버 실행 성공 메시지를 확인한 뒤 `http://127.0.0.1:4174`를 직접 엽니다. 브라우저 탭을 닫아도 서버는 계속 실행되므로 종료할 때는 `종료.cmd`를 사용합니다.
+
+매번 설치·빌드할 필요는 없습니다. 소스를 업데이트했을 때 다시 설치·빌드합니다. `node_modules`, 빌드 결과 `dist`, Node.js·Python 실행 환경과 작품 데이터는 저장소에 포함하지 않습니다.
 
 ## 코드와 데이터
 
@@ -148,14 +185,84 @@ pnpm build
 
 | 증상 | 확인할 내용 |
 | --- | --- |
-| Node.js runtime not found | Node.js를 설치하고 실행기를 다시 엽니다. |
-| 빌드된 화면이 없습니다 | 저장소 폴더에서 `pnpm install --frozen-lockfile`, `pnpm build`를 실행합니다. |
+| Node.js runtime not found / node 또는 npm을 찾을 수 없음 | Node.js 22 이상을 설치한 뒤 터미널을 새로 열고 `node --version`, `npm --version`을 확인합니다. 계속 실패하면 `where node`, `where npm` 결과를 확인합니다. |
+| pnpm을 찾을 수 없음 | `npm install -g pnpm@10.15.1`을 실행하고 터미널을 새로 엽니다. `pnpm --version`과 `where pnpm`으로 확인합니다. |
+| PowerShell에서 npm.ps1 또는 pnpm.ps1 실행이 차단됨 | 위 안내대로 명령 프롬프트(cmd)를 열어 실행합니다. PowerShell에서는 `npm.cmd`, `pnpm.cmd`로 실행할 수도 있습니다. |
+| package.json이 없다는 오류 / ERR_PNPM_NO_PKG_MANIFEST | 현재 위치가 소스 폴더인지 확인합니다. `package.json`과 `실행.cmd`가 함께 있는 폴더에서 명령을 실행합니다. |
+| Cannot find module 'dotenv' 등 라이브러리를 찾지 못함 | 소스 폴더에서 `pnpm install --frozen-lockfile`을 실행합니다. 다른 PC의 `node_modules`를 복사하는 대신 이 PC에서 설치합니다. |
+| ERR_PNPM_OUTDATED_LOCKFILE 또는 잠금 파일 호환 오류 | `pnpm --version`을 확인하고 안내한 버전을 사용합니다. `package.json`과 `pnpm-lock.yaml`을 같은 배포 버전에서 받았는지 확인합니다. 해결되지 않으면 두 파일과 오류를 함께 전달해 진단받습니다. |
+| 설치 중 다운로드·인증서·네트워크 오류 | 인터넷 연결과 오류에 나온 주소를 확인합니다. 오류 전문을 전달해 진단받고, 인증서 검증을 끄는 방법으로 우회하지 않습니다. |
+| 빌드된 화면이 없습니다 | 소스 폴더에서 `pnpm install --frozen-lockfile`, `pnpm build`를 실행합니다. 성공 후 `dist/index.html`이 있는지 확인합니다. |
+| pnpm build에서 TypeScript·Vite 오류 | 첫 오류부터 마지막까지 복사하고 Node.js·pnpm 버전과 함께 전달합니다. 빌드가 실패한 상태에서는 이전 화면이 남거나 실행되지 않을 수 있습니다. |
+| 창이 닫히거나 서버 준비를 확인하지 못함 | 명령 프롬프트에서 `실행.cmd`를 실행해 오류를 확인합니다. 서버 시작 단계의 오류는 연결한 데이터 폴더의 `logs/rplay-canvas.stderr.log`도 확인합니다. |
+| 4174 포트 사용 중 / 같은 포트에서 다른 관리툴이 실행 중 | 기존에 실행한 도구의 `종료.cmd`를 사용합니다. `pnpm start`나 `pnpm dev`로 켰다면 해당 터미널에서 Ctrl+C로 종료합니다. 어떤 프로그램인지 모르면 `netstat -ano \| findstr :4174` 결과의 LISTENING 행에 있는 PID를 확인하고 진단받습니다. |
+| 브라우저에서 연결할 수 없음 | 먼저 `실행.cmd`의 성공 여부와 서버 로그를 확인합니다. 기본 주소는 `http://127.0.0.1:4174`이며, `PORT`를 따로 지정했다면 실행기에 표시된 주소를 사용합니다. |
+| 선택한 데이터 폴더가 없습니다 / 코드 폴더 밖이어야 합니다 | `데이터 폴더 변경.cmd`로 실제 존재하는 외부 데이터 폴더를 선택합니다. 환경변수 `CHARACTER_MANAGER_DATA_DIR`가 지정되어 있으면 그 값이 개인 설정보다 우선합니다. |
+| 개인 설정 파일을 읽을 수 없습니다 | 오류에 표시된 `rplay-canvas-settings.json`의 JSON 형식을 확인합니다. 원본을 백업한 뒤 `dataDirectory` 값과 문법을 점검하고, 작품 데이터 폴더는 삭제하지 않습니다. |
 | 작품이나 허브 목록이 비어 있음 | 현재 작품과 연결한 데이터 폴더를 확인하고, 원본 관리 화면에서 저장했는지 확인합니다. |
 | 허브 연결 버튼을 누를 수 없음 | 허브·입력 대상·스토리 노드가 모두 있는지, 중복 이름이 없는지 확인합니다. |
 | DATA 경로를 변경했는데 그대로임 | `종료.cmd`로 종료한 후 `실행.cmd`로 다시 실행합니다. |
-| MD 내보내기 실패 | Python 3.9 이상 설치와 `python --version` 실행을 확인합니다. |
+| Python 실행 파일을 찾지 못했습니다 / MD 내보내기 실패 | `python --version`으로 3.9 이상인지 확인합니다. 명령이 없거나 Microsoft Store만 열리면 설치한 Python의 실행 경로를 확인합니다. 다른 Python을 지정하는 방법은 아래를 참고합니다. |
 
-업데이트하려면 작성 중인 자료를 저장하고 서버를 종료한 뒤 `git pull`, `pnpm install --frozen-lockfile`, `pnpm build`를 실행합니다. 다시 `실행.cmd`를 열면 됩니다.
+Python이 설치되어 있지만 자동으로 찾지 못한다면, 명령 프롬프트에서 `set "PYTHON_EXECUTABLE=C:\실제 Python 설치 폴더\python.exe"`로 실제 파일 경로를 지정한 뒤 **같은 창에서** `실행.cmd`를 실행합니다. 기존 서버는 먼저 종료해야 합니다. 이 설정은 해당 창에만 적용됩니다. Python이 정상 실행되는데도 실패하면 화면의 오류나 Python traceback을 확인합니다.
+
+### AI에게 설치·오류 해결을 요청하기
+
+이 README와 아래 양식을 함께 전달하면 설치 단계와 오류 원인을 설명받기 쉽습니다. README만으로 모든 PC의 문제를 확정할 수는 없으므로 **실행한 명령과 오류 전문**을 함께 전달하세요. AI가 컴퓨터나 저장소를 직접 볼 수 없는 경우에는 필요한 파일을 추가로 요청하도록 합니다.
+
+```text
+알플레이 캔버스툴 설치 또는 사용을 도와주세요. 첨부한 README를 기준으로
+초보자가 따라 할 수 있게 어디에서 어떤 명령을 실행하는지 한 단계씩 설명해 주세요.
+
+- 운영체제: Windows (버전:     )
+- 받은 방법: GitHub ZIP / git clone
+- 프로그램 폴더 경로:
+- 사용한 창: 명령 프롬프트(cmd) / PowerShell / 실행.cmd 더블클릭
+- 진행 단계: 환경 준비 / 설치 / 빌드 / 실행 / 기능 사용 / 업데이트
+- 실행한 명령 또는 누른 버튼:
+- 기대한 결과와 실제 증상:
+- node --version 결과:
+- pnpm --version 결과:
+- 오류 메시지 전문:
+- MD 내보내기 문제라면 python --version 결과:
+
+정보가 부족하면 필요한 확인 명령이나 파일을 먼저 요청해 주세요.
+원인과 확인된 사실을 구분하고, 각 단계의 정상 결과도 알려 주세요.
+작품 data 폴더를 삭제하거나 초기화하지 말고, 설정 변경 전에는 백업을 안내해 주세요.
+```
+
+진단용 명령은 소스 폴더의 명령 프롬프트에서 실행합니다. 결과만 복사하면 되며, 아래 명령은 설치하거나 파일을 변경하지 않습니다. 아직 설치하지 않은 도구는 찾을 수 없다고 나오는 것이 정상입니다.
+
+```bat
+node --version
+npm --version
+pnpm --version
+where node
+where pnpm
+dir package.json pnpm-lock.yaml
+dir dist\index.html
+```
+
+추가 자료가 필요하면 증상에 맞게 전달합니다.
+
+| 문제 단계 | AI에게 추가로 전달할 자료 |
+| --- | --- |
+| 설치·빌드 | `package.json`, `pnpm-lock.yaml`, 실패한 명령의 출력 |
+| 실행·종료 | `실행.cmd`, `종료.cmd`, `scripts/launcher.cjs`, 관련 서버 로그의 오류 부분 |
+| 데이터 경로 | `shared/dataPaths.cjs`, `shared/dataDirectorySettings.cjs`, 현재 폴더 배치와 설정 오류 |
+| MD 내보내기 | Python 버전, 오류 전문, 필요하면 `assemble_work.py`, `data_paths.py` |
+| 특정 화면·캔버스 처리 | 재현 순서, 오류 화면, 문제가 생긴 기능의 코드와 최소 예제 |
+
+로그는 **현재 연결한 데이터 폴더**의 `logs/rplay-canvas.stdout.log`와 `logs/rplay-canvas.stderr.log`에 있습니다. 서버가 시작되기 전 실패했다면 로그 파일이 없을 수 있으므로 실행 창의 오류를 전달합니다. 공유할 때는 관련 오류 부분만 보내고 `.env`, 실행 정보의 토큰, 비공개 작품 내용은 제외하세요. 로컬 전용 `docs/`, `AGENTS.md`, `GEMINI.md` 없이도 이 README와 `public/`의 사용 가이드로 안내할 수 있습니다.
+
+### 업데이트
+
+작성 중인 자료를 저장하고 연결 중인 외부 `data/`를 백업한 뒤 서버를 종료합니다.
+
+- **Git으로 받은 경우:** 소스 폴더에서 `git pull` → `pnpm install --frozen-lockfile` → `pnpm build` 순서로 실행합니다. `git pull`에서 로컬 변경 충돌이 나오면 오류와 `git status` 결과를 확인하고, 변경을 버리는 명령을 임의로 실행하지 않습니다.
+- **ZIP으로 받은 경우:** 최신 ZIP을 새 폴더에 압축 해제하고 설치·빌드를 다시 실행합니다. `git pull`은 사용할 수 없습니다. 새 폴더가 이전과 다른 상위 위치라면 `데이터 폴더 변경.cmd`로 기존 외부 데이터 폴더를 연결합니다. 소스 ZIP에는 기존 작품 데이터가 들어 있지 않습니다.
+
+다시 `실행.cmd`를 열고 기존 작품 목록이 표시되는지 확인합니다.
 
 ## 개발
 

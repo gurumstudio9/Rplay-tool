@@ -48,6 +48,10 @@ config/*.json
 *.zip
 *.tar.gz
 
+# Screenshots and illustrated cards shipped with the beginner guide
+!/public/guide/images/*.webp
+!/public/guide/cards/*.webp
+
 # User generated image tags
 # data/works/*/이미지태그/*.json
 

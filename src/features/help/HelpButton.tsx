@@ -43,6 +43,7 @@ export function HelpButton({ topic, label }: { topic: HelpTopicId; label?: strin
           <footer className="feature-help-footer">
             {activeTopic !== "guide" ? <button type="button" onClick={() => setActiveTopic("guide")}>처음 사용 순서 보기</button>
               : topic !== "guide" && <button type="button" onClick={() => setActiveTopic(topic)}>이 기능 도움말로 돌아가기</button>}
+            <a href="/guide/index.html" target="_blank" rel="noreferrer">화면으로 따라하기</a>
             <a href="/사용가이드.md" download="알플레이_캔버스툴_사용가이드.md">전체 가이드 내려받기 (.md)</a>
           </footer>
         </div>
